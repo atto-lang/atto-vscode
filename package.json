@@ -1,0 +1,43 @@
+{
+  "name": "atto-vscode",
+  "displayName": "AttoLang Syntax",
+  "description": "AttoLang syntax highlighting and lexical fallback",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "atto",
+        "aliases": [
+          "AttoLang",
+          "atto"
+        ],
+        "extensions": [
+          ".atto",
+          ".ores"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "atto",
+        "scopeName": "source.atto",
+        "path": "./syntaxes/atto.tmLanguage.json"
+      }
+    ]
+  },
+  "scripts": {
+    "test": "node --test tests/*.test.mjs"
+  },
+  "devDependencies": {
+    "vscode-textmate": "9.3.2",
+    "vscode-oniguruma": "2.0.1"
+  }
+}
