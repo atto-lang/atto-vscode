@@ -83,11 +83,18 @@ test("quoted literals, Symbol literals, and templates mask keywords",()=>{
   const src='// actor implements\n"actor implements" #ready #"guard unsafe" '+
     String.fromCharCode(96)+"actor await"+String.fromCharCode(96);
   inScope(tokenAt(src,"actor"),"comment.line");
-  inScope(tokenAt(src,'"actor implements"'),"string.quoted.double");
-  inScope(tokenAt(src,"#ready"),"constant.other.symbol");
-  inScope(tokenAt(src,'#"guard unsafe"'),"constant.other.symbol.quoted");
-  const template=String.fromCharCode(96)+"actor await"+String.fromCharCode(96);
-  inScope(tokenAt(src,template),"string.quoted.template");
+  for(const [needle,scope] of [
+    ['"actor implements"',"string.quoted.double"],
+    ["#ready","constant.other.symbol"],
+    ['#"guard unsafe"',"constant.other.symbol.quoted"],
+    [String.fromCharCode(96)+"actor await"+String.fromCharCode(96),"string.quoted.template"]
+  ]){
+    const at=src.indexOf(needle);
+    const spans=tokensFor(src).filter(t=>t.start<at+needle.length&&t.end>at);
+    assert.ok(spans.length>0,needle);
+    assert.ok(spans.every(t=>t.scopes.some(s=>s===scope||s.startsWith(scope+"."))),
+      needle+" leaked into nonliteral scopes: "+JSON.stringify(spans));
+  }
 });
 
 test("nested block comments do not leak keywords or swallow following code",()=>{
@@ -107,7 +114,12 @@ test("whole-word guards exclude case variants and identifier substrings",()=>{
 test("nb-select is a display compound; contextual subtraction is not",()=>{
   const src="nb-select nb-select_more critical-read a-b;";
   inScope(tokenAt(src,"nb-select"),"keyword.concurrency");
-  notKeyword(tokenAt(src,"nb-select_more"));
+  // The legal NB prefix may retain its keyword scope even if the suffix makes
+  // this a subtraction expression. It must not be a *single* nb-select token.
+  const near=src.indexOf("nb-select_more");
+  const nearTokens=tokensFor(src).filter(t=>t.start<near+"nb-select_more".length&&t.end>near);
+  assert.ok(nearTokens.length>1);
+  assert.ok(!nearTokens.some(t=>t.text==="nb-select"));
   assert.ok(!tokensFor("critical-read").some(t=>t.scopes.some(s=>s.startsWith("keyword.concurrency"))));
   assert.ok(!tokensFor("a-b").some(t=>t.scopes.some(s=>s.startsWith("keyword.concurrency"))));
 });
