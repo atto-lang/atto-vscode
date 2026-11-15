@@ -11,3 +11,7 @@ Strings, line/block comments, templates and Symbols mask keyword-like text. The 
 Run `npm install` and `npm test` to exercise the **real** `vscode-textmate` and WASM Oniguruma grammar engine. It is also possible to load the extension as an unpacked development extension in VS Code. Actual VS Code extension-host activation tests, parser-aware semantic tokens, interpolation analysis and compiler-backed execution remain separate milestones.
 
 This package is private and unpublished; it has no background hooks, telemetry, network access or runtime compiler invocation.
+
+## Starter snippets (preview)
+
+VS Code now offers opt-in insertion snippets for a function, actor, conditional, while loop, match, Symbol and functional pipeline. Type `atto-` in an Atto file to discover them. They are **editor templates**, not executable compiler validation: target backends may support different subsets and match arms must be completed manually. The snippet registration and placeholder structure are checked with `npm test`.

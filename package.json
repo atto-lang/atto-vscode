@@ -31,6 +31,12 @@
         "scopeName": "source.atto",
         "path": "./syntaxes/atto.tmLanguage.json"
       }
+    ],
+    "snippets": [
+      {
+        "language": "atto",
+        "path": "./snippets/atto.code-snippets"
+      }
     ]
   },
   "scripts": {
