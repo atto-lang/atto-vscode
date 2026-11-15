@@ -143,7 +143,7 @@ test("callable stop is lexically a keyword until parser-aware tokens exist",()=>
 });
 
 test("modern mtd receiver declarations and pure functions have lexical scopes",()=>{
-  const src="pure fnc apply(int x): int { return x; }\\ndefine class Counter as\\n  mtd inc(self): int { return 1; }\\nend";
+  const src="pure fnc apply(int x): int { return x; }\ndefine class Counter as\n  mtd inc(self): int { return 1; }\nend";
   inScope(tokenAt(src,"pure"),"keyword.effect");
   inScope(tokenAt(src,"fnc"),"keyword.entity");
   inScope(tokenAt(src,"mtd"),"keyword.entity");
