@@ -1,10 +1,14 @@
 # AttoLang VS Code syntax extension (preview)
 
-Registers `.atto` and legacy `.ores` with a real TextMate lexical grammar. **No production LSP, diagnostics, formatter, or backend-parity guarantee yet.**
+Registers canonical AttoLang `.atto` source with a TextMate lexical grammar. Additional compatibility file extensions in package metadata are migration details, not canonical language source forms. **No production LSP, diagnostics, formatter, or backend-parity guarantee yet.**
 
-The grammar is adapted from the [AttoLang keyword taxonomy](https://github.com/ores-truffle-oreslang/attolang-language-spec.md/blob/main/spec/23-keyword-taxonomy-and-highlighting.md). It extends the historical 93-word catalog with `guard` and `unsafe` from the Java lexer (blob `94920ee03b82c07d5bf962bc5b8ed1d555ac593e`). LLVM has a different 120-name reserved policy that is not automatically promoted to Java keywords.
+The grammar is adapted from the [current AttoLang specification](https://github.com/atto-lang/atto-spec). The grammar is a conservative lexical approximation. Backend-specific historic token inventories are not normative; consult the current specification and test each lexical rule.
 
 Strings, line/block comments, templates and Symbols mask keyword-like text. The whole-word `nb-select` display scope does **not** claim that Java emits one token (it emits NB and SELECT separately). `critical-read`, `critical-write`, `transform-pipe`, `declare`, `sealed` and `pipe` require parser/contextual support; the lexical fallback does not classify them globally as reserved.
+
+## Canonical naming and specification
+
+[atto-vscode](https://github.com/atto-lang/atto-vscode) is the maintained AttoLang repository. Use `.atto` source, `atto-*` repository names, and [atto-spec](https://github.com/atto-lang/atto-spec) for current language rules (ownership, borrowing, effects, actors, and syntax). Distinguish proposed and parser-only features from independently executed compiler support in [atto-platform-conformance](https://github.com/atto-lang/atto-platform-conformance). Naming migration does not by itself rename implementation artifacts, guarantee backend compatibility or certify guest execution.
 
 ## Validation and installation
 
@@ -20,6 +24,6 @@ This package is private and unpublished; it has no background hooks, telemetry, 
 
 **Security and portability boundary:** Untrusted workspace content must not execute commands on activation; no arbitrary compiler downloads without verified provenance; respect extension sandbox and workspace trust.
 
-AttoLang is the public name; preserve existing Oreslang/.ores compatibility and use canonical .atto for new portable library source. This README defines scope, not feature readiness.
+AttoLang is the canonical project identity; use `.atto` and the `atto-lang` organization for current documentation. This README defines scope, not feature readiness.
 
 **Acceptance:** name exact source SHA/tree, runtime/toolchain, positive and negative checks and execution receipt before claiming support. Host-only tests and empty CI steps do not prove guest execution.
