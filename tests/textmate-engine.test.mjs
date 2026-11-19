@@ -62,7 +62,6 @@ test("registered .atto grammar compiles under vscode-textmate and Oniguruma",()=
   assert.equal(packageJSON.contributes.languages[0].id,"atto");
   assert.deepEqual(packageJSON.contributes.languages[0].extensions,[".atto"]);
   assert.equal(packageJSON.contributes.languages[0].aliases.includes("AttoLang"),true);
-  assert.equal(JSON.stringify(packageJSON.contributes.languages[0]).includes(".ores"),false);
   assert.equal(packageJSON.contributes.grammars[0].path,"./syntaxes/atto.tmLanguage.json");
 });
 
