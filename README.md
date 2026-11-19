@@ -1,3 +1,5 @@
+> **AI agent instructions (organization-wide):** Before working on code, issues, or pull requests, read and follow the [organization `AGENTS.md`](https://github.com/atto-lang/.github/blob/main/AGENTS.md), including its **merge-first stealth-development policy**. Honor any repository-local `AGENTS.md`, explicit holds, and GitHub-enforced rules.
+
 # AttoLang VS Code syntax extension (preview)
 
 Registers canonical AttoLang `.atto` source with a TextMate lexical grammar. Additional compatibility file extensions in package metadata are migration details, not canonical language source forms. **No production LSP, diagnostics, formatter, or backend-parity guarantee yet.**
