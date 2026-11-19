@@ -1,6 +1,6 @@
 # AttoLang VS Code syntax extension (preview)
 
-Registers canonical AttoLang `.atto` source with a TextMate lexical grammar. Additional compatibility file extensions in package metadata are migration details, not canonical language source forms. **No production LSP, diagnostics, formatter, or backend-parity guarantee yet.**
+Registers only canonical AttoLang `.atto` source with a TextMate lexical grammar. The package manifest does not register historical language file extensions. **No production LSP, diagnostics, formatter, or backend-parity guarantee yet.**
 
 The grammar is adapted from the [current AttoLang specification](https://github.com/atto-lang/atto-spec). The grammar is a conservative lexical approximation. Backend-specific historic token inventories are not normative; consult the current specification and test each lexical rule.
 
