@@ -60,7 +60,8 @@ function notKeyword(token){
 test("registered .atto grammar compiles under vscode-textmate and Oniguruma",()=>{
   assert.equal(json.scopeName,"source.atto");
   assert.equal(packageJSON.contributes.languages[0].id,"atto");
-  assert.deepEqual(packageJSON.contributes.languages[0].extensions,[".atto",".ores"]);
+  assert.deepEqual(packageJSON.contributes.languages[0].extensions,[".atto"]);
+  assert.equal(packageJSON.contributes.languages[0].aliases.includes("AttoLang"),true);
   assert.equal(packageJSON.contributes.grammars[0].path,"./syntaxes/atto.tmLanguage.json");
 });
 
