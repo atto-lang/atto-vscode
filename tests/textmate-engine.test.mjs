@@ -141,3 +141,22 @@ test("callable stop is lexically a keyword until parser-aware tokens exist",()=>
   const src="worker.stop();";
   inScope(tokenAt(src,"stop"),"keyword.concurrency");
 });
+
+test("modern mtd receiver declarations and pure functions have lexical scopes",()=>{
+  const src="pure fnc apply(int x): int { return x; }\ndefine class Counter as\n  mtd inc(self): int { return 1; }\nend";
+  inScope(tokenAt(src,"pure"),"keyword.effect");
+  inScope(tokenAt(src,"fnc"),"keyword.entity");
+  inScope(tokenAt(src,"mtd"),"keyword.entity");
+  inScope(tokenAt(src,"self"),"variable.language");
+});
+
+test("mtd and pure highlighting is whole-word and masked inside literals",()=>{
+  const src='mtd mtd_helper _mtd pure pure2 pure_value PURE "#pure mtd" // mtd pure';
+  inScope(tokenAt(src,"mtd"),"keyword.entity");
+  inScope(tokenAt(src,"pure"),"keyword.effect");
+  for(const ident of ["mtd_helper","_mtd","pure2","pure_value","PURE"])
+    notKeyword(tokenAt(src,ident));
+  inScope(tokenAt(src,"#pure mtd"),"string.quoted.double");
+  inScope(tokenAt(src,"mtd",src.indexOf("//")),"comment.line");
+  inScope(tokenAt(src,"pure",src.indexOf("//")),"comment.line");
+});
