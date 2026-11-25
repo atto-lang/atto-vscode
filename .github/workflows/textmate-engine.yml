@@ -1,0 +1,31 @@
+name: AttoLang TextMate engine
+on:
+  push:
+    paths:
+      - 'package.json'
+      - 'syntaxes/**'
+      - 'language-configuration.json'
+      - 'tests/**'
+      - '.github/workflows/textmate-engine.yml'
+  pull_request:
+    paths:
+      - 'package.json'
+      - 'syntaxes/**'
+      - 'language-configuration.json'
+      - 'tests/**'
+      - '.github/workflows/textmate-engine.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  grammar:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Install exact TextMate and Oniguruma versions
+        run: npm install --ignore-scripts --no-audit --no-fund --no-package-lock
+      - name: Test actual TextMate grammar engine
+        run: npm test

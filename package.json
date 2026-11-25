@@ -1,41 +1,24 @@
 {
-  "name": "oreslang-vscode",
-  "displayName": "Oreslang",
-  "description": "Syntax highlighting, exact keyword colors, and editor diagnostics for Oreslang.",
+  "name": "atto-vscode",
+  "displayName": "AttoLang Syntax",
+  "description": "AttoLang syntax highlighting and lexical fallback",
   "version": "0.1.0",
-  "publisher": "ores-truffle-oreslang",
-  "license": "MIT",
+  "private": true,
   "engines": {
     "vscode": "^1.90.0"
   },
   "categories": [
-    "Programming Languages",
-    "Linters"
+    "Programming Languages"
   ],
-  "activationEvents": [
-    "onLanguage:oreslang",
-    "onCommand:oreslang.checkCurrentFile"
-  ],
-  "main": "./extension.js",
-  "scripts": {
-    "test": "node --test test/*.test.js",
-    "test:extension-host": "node test/extension-host/run.cjs",
-    "pack:vsix": "vsce package --no-dependencies --out dist/Oreslang.vsix"
-  },
   "contributes": {
     "languages": [
       {
-        "id": "oreslang",
+        "id": "atto",
         "aliases": [
-          "Oreslang",
-          "oreslang",
-          "ores",
           "AttoLang",
-          "attolang",
           "atto"
         ],
         "extensions": [
-          ".ores",
           ".atto"
         ],
         "configuration": "./language-configuration.json"
@@ -43,86 +26,17 @@
     ],
     "grammars": [
       {
-        "language": "oreslang",
-        "scopeName": "source.oreslang",
-        "path": "./syntaxes/oreslang.tmLanguage.json"
+        "language": "atto",
+        "scopeName": "source.atto",
+        "path": "./syntaxes/atto.tmLanguage.json"
       }
-    ],
-    "commands": [
-      {
-        "command": "oreslang.checkCurrentFile",
-        "title": "Oreslang: Check Current File"
-      }
-    ],
-    "configuration": {
-      "title": "Oreslang",
-      "properties": {
-        "oreslang.colors.keyword": {
-          "type": "string",
-          "default": "#FF00FF",
-          "description": "Exact editor color for Oreslang language keywords."
-        },
-        "oreslang.colors.runtimeGlobal": {
-          "type": "string",
-          "default": "#4169E1",
-          "description": "Exact editor color for Oreslang runtime globals such as recover, defer, throw, and raise."
-        },
-        "oreslang.diagnostics.enabled": {
-          "type": "boolean",
-          "default": true,
-          "description": "Enable built-in lexical and structural diagnostics."
-        },
-        "oreslang.cli.command": {
-          "type": "string",
-          "default": "oreslang",
-          "description": "Oreslang developer-tooling CLI executable."
-        },
-        "oreslang.cli.args": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "default": [
-            "check",
-            "--format=json",
-            "{file}"
-          ],
-          "description": "Arguments for the Oreslang CLI. {file} and {workspaceFolder} are substituted."
-        },
-        "oreslang.cli.runOnSave": {
-          "type": "boolean",
-          "default": true,
-          "description": "Run `oreslang check` after saving an Oreslang file."
-        },
-        "oreslang.cli.timeoutMs": {
-          "type": "number",
-          "default": 10000,
-          "minimum": 100,
-          "description": "Timeout for an `oreslang check` invocation."
-        }
-      }
-    }
+    ]
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/ores-truffle-oreslang/vscode-plugins.git"
+  "scripts": {
+    "test": "node --test tests/*.test.mjs"
   },
   "devDependencies": {
-    "vscode-oniguruma": "2.0.1",
     "vscode-textmate": "9.3.2",
-    "@vscode/test-electron": "3.1.0",
-    "@vscode/vsce": "3.6.0"
-  },
-  "capabilities": {
-    "untrustedWorkspaces": {
-      "supported": "limited",
-      "description": "Syntax highlighting and local diagnostics work in Restricted Mode; running the Oreslang CLI requires Workspace Trust.",
-      "restrictedConfigurations": [
-        "oreslang.cli.command",
-        "oreslang.cli.args",
-        "oreslang.cli.runOnSave",
-        "oreslang.cli.timeoutMs"
-      ]
-    }
+    "vscode-oniguruma": "2.0.1"
   }
 }

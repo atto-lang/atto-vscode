@@ -1,0 +1,221 @@
+{
+  "name": "AttoLang",
+  "scopeName": "source.atto",
+  "fileTypes": [
+    "atto",
+    "ores"
+  ],
+  "patterns": [
+    {
+      "include": "#lineComments"
+    },
+    {
+      "include": "#blockComments"
+    },
+    {
+      "include": "#symbols"
+    },
+    {
+      "include": "#strings"
+    },
+    {
+      "include": "#compound"
+    },
+    {
+      "include": "#operators"
+    },
+    {
+      "include": "#javaAdditions"
+    },
+    {
+      "include": "#keywords"
+    }
+  ],
+  "repository": {
+    "lineComments": {
+      "patterns": [
+        {
+          "name": "comment.line.double-slash.atto",
+          "match": "//.*$"
+        }
+      ]
+    },
+    "blockComments": {
+      "patterns": [
+        {
+          "name": "comment.block.atto",
+          "begin": "/\\*",
+          "end": "\\*/",
+          "patterns": [
+            {
+              "include": "#blockComments"
+            }
+          ]
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.atto",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "name": "constant.character.escape.atto",
+              "match": "\\\\."
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.single.atto",
+          "begin": "'",
+          "end": "'",
+          "patterns": [
+            {
+              "name": "constant.character.escape.atto",
+              "match": "\\\\."
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.template.atto",
+          "begin": "`",
+          "end": "`",
+          "patterns": [
+            {
+              "name": "constant.character.escape.atto",
+              "match": "\\\\."
+            }
+          ]
+        }
+      ]
+    },
+    "symbols": {
+      "patterns": [
+        {
+          "name": "constant.other.symbol.quoted.atto",
+          "begin": "#\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "name": "constant.character.escape.atto",
+              "match": "\\\\."
+            }
+          ]
+        },
+        {
+          "name": "constant.other.symbol.quoted.atto",
+          "begin": "#'",
+          "end": "'",
+          "patterns": [
+            {
+              "name": "constant.character.escape.atto",
+              "match": "\\\\."
+            }
+          ]
+        },
+        {
+          "name": "constant.other.symbol.atto",
+          "match": "#[A-Za-z_][A-Za-z0-9_]*"
+        }
+      ]
+    },
+    "compound": {
+      "patterns": [
+        {
+          "name": "keyword.concurrency.atto",
+          "match": "(?<![\\p{L}\\p{N}_])nb-select(?![\\p{L}\\p{N}_-])"
+        }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.declaration.atto",
+          "match": "(?<![\\p{L}\\p{N}_])(?:define|import|impl|def)(?![\\p{L}\\p{N}_])"
+        },
+        {
+          "name": "keyword.entity.atto",
+          "match": "(?<![\\p{L}\\p{N}_])(?:generator|interface|namespace|contract|isoactor|routine|module|struct|actor|class|trait|type|mtd|fnc)(?![\\p{L}\\p{N}_])"
+        },
+        {
+          "name": "keyword.type.atto",
+          "match": "(?<![\\p{L}\\p{N}_])(?:typeof|types)(?![\\p{L}\\p{N}_])"
+        },
+        {
+          "name": "keyword.relationship.atto",
+          "match": "(?<![\\p{L}\\p{N}_])(?:implements|conforms|extends)(?![\\p{L}\\p{N}_])"
+        },
+        {
+          "name": "keyword.grammar.atto",
+          "match": "(?<![\\p{L}\\p{N}_])(?:from|over|then|as|of)(?![\\p{L}\\p{N}_])"
+        },
+        {
+          "name": "storage.modifier.atto",
+          "match": "(?<![\\p{L}\\p{N}_])(?:untrusted|abstract|private|shared|static|const|nlex|mut|pub)(?![\\p{L}\\p{N}_])"
+        },
+        {
+          "name": "keyword.binding.atto",
+          "match": "(?<![\\p{L}\\p{N}_])(?:let|val)(?![\\p{L}\\p{N}_])"
+        },
+        {
+          "name": "keyword.operator.atto",
+          "match": "(?<![\\p{L}\\p{N}_])(?:new)(?![\\p{L}\\p{N}_])"
+        },
+        {
+          "name": "keyword.effect.atto",
+          "match": "(?<![\\p{L}\\p{N}_])(?:suspends|async|pure)(?![\\p{L}\\p{N}_])"
+        },
+        {
+          "name": "keyword.control.atto",
+          "match": "(?<![\\p{L}\\p{N}_])(?:continue|default|elseif|return|select|switch|block|break|match|while|yield|done|elif|else|loop|end|for|do|fi|if)(?![\\p{L}\\p{N}_])"
+        },
+        {
+          "name": "variable.language.atto",
+          "match": "(?<![\\p{L}\\p{N}_])(?:super|self)(?![\\p{L}\\p{N}_])"
+        },
+        {
+          "name": "keyword.effect.atto",
+          "match": "(?<![\\p{L}\\p{N}_])(?:finally|recover|catch|defer|panic|raise|throw|trap|try)(?![\\p{L}\\p{N}_])"
+        },
+        {
+          "name": "keyword.concurrency.atto",
+          "match": "(?<![\\p{L}\\p{N}_])(?:writech|readch|await|spawn|stop|cb|nb|rt)(?![\\p{L}\\p{N}_])"
+        },
+        {
+          "name": "keyword.operator.atto",
+          "match": "(?<![\\p{L}\\p{N}_])(?:matches|neq|eq|is)(?![\\p{L}\\p{N}_])"
+        },
+        {
+          "name": "constant.language.atto",
+          "match": "(?<![\\p{L}\\p{N}_])(?:false|null|true|void|arr|obj)(?![\\p{L}\\p{N}_])"
+        },
+        {
+          "name": "keyword.compute.atto",
+          "match": "(?<![\\p{L}\\p{N}_])(?:quantum|cpu|gpu)(?![\\p{L}\\p{N}_])"
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "name": "keyword.operator.pipeline.atto",
+          "match": "\\|>"
+        }
+      ]
+    },
+    "javaAdditions": {
+      "patterns": [
+        {
+          "name": "keyword.control.atto",
+          "match": "(?<![\\p{L}\\p{N}_])guard(?![\\p{L}\\p{N}_])"
+        },
+        {
+          "name": "keyword.effect.atto",
+          "match": "(?<![\\p{L}\\p{N}_])unsafe(?![\\p{L}\\p{N}_])"
+        }
+      ]
+    }
+  }
+}

@@ -1,124 +1,39 @@
-# Oreslang for VS Code
+> **AI agent instructions (organization-wide):** Before working on code, issues, or pull requests, read and follow the [organization `AGENTS.md`](https://github.com/atto-lang/.github/blob/main/AGENTS.md), including its **merge-first stealth-development policy**. Honor any repository-local `AGENTS.md`, explicit holds, and GitHub-enforced rules.
 
-Language support for `.ores` files.
+# AttoLang VS Code syntax extension (preview)
 
-## Editor contract
+Registers only canonical AttoLang `.atto` source with a TextMate lexical grammar. The package manifest does not register historical language file extensions. **No production LSP, diagnostics, formatter, or backend-parity guarantee yet.**
 
-The extension deliberately keeps Oreslang's language keywords in one color family instead of allowing control-flow, declarations, visibility, and type-system keywords to drift apart.
+The grammar is adapted from the [current AttoLang specification](https://github.com/atto-lang/atto-spec). The grammar is a conservative lexical approximation. Backend-specific historic token inventories are not normative; consult the current specification and test each lexical rule.
 
-- **Language keywords:** exact magenta by default (`#FF00FF`).
-- **Runtime globals:** exact royal blue by default (`#4169E1`) for `recover`, `defer`, `throw`, and `raise`.
+Strings, line/block comments, templates and Symbols mask keyword-like text. The whole-word `nb-select` display scope does **not** claim that Java emits one token (it emits NB and SELECT separately). `critical-read`, `critical-write`, `transform-pipe`, `declare`, `sealed` and `pipe` require parser/contextual support; the lexical fallback does not classify them globally as reserved.
 
-The exact colors are applied by editor decorations, while the bundled TextMate grammar also assigns stable semantic scopes for compatibility with normal VS Code themes.
+## Canonical naming and specification
 
-Examples of the magenta class include `pub`, `fnc`, `void`, `class`, `module`, `return`, `if`, `else`, `elif`, `fi`, `case`, `match`, `switch`, `try`, `catch`, `select`, actor/concurrency modifiers, type-system keywords, and declaration keywords.
+[atto-vscode](https://github.com/atto-lang/atto-vscode) is the maintained AttoLang repository. Use `.atto` source, `atto-*` repository names, and [atto-spec](https://github.com/atto-lang/atto-spec) for current language rules (ownership, borrowing, effects, actors, and syntax). Distinguish proposed and parser-only features from independently executed compiler support in [atto-platform-conformance](https://github.com/atto-lang/atto-platform-conformance). Naming migration does not by itself rename implementation artifacts, guarantee backend compatibility or certify guest execution.
 
-## Diagnostics / squigglies
+## Validation and installation
 
-Built-in diagnostics run without a compiler process and currently catch:
+Run `npm install` and `npm test` to exercise the **real** `vscode-textmate` and WASM Oniguruma grammar engine. It is also possible to load the extension as an unpacked development extension in VS Code. Actual VS Code extension-host activation tests, parser-aware semantic tokens, interpolation analysis and compiler-backed execution remain separate milestones.
 
-- unmatched or mismatched `()`, `[]`, and `{}`;
-- unterminated strings;
-- unterminated nested block comments.
+This package is private and unpublished; it has no background hooks, telemetry, network access or runtime compiler invocation.
 
-The scanner intentionally ignores keyword-looking text inside strings and comments.
+## Repository ownership and contribution routing
 
-Authoritative diagnostics come through the canonical Oreslang developer-tooling CLI:
+**Belongs here:** VS Code AttoLang language registration, syntax highlighting, diagnostics/LSP client, formatting integration and editor release assets.
 
-```text
-oreslang check --format=json {file}
-```
+**Belongs elsewhere:** Canonical formatting engine in atto-format, compiler diagnostics producer in atto-static-analysis.rs and normative grammar in atto-spec.
 
-The defaults are:
+**Security and portability boundary:** Untrusted workspace content must not execute commands on activation; no arbitrary compiler downloads without verified provenance; respect extension sandbox and workspace trust.
 
-- `oreslang.cli.command = "oreslang"`
-- `oreslang.cli.args = ["check", "--format=json", "{file}"]`
+AttoLang is the canonical project identity; use `.atto` and the `atto-lang` organization for current documentation. This README defines scope, not feature readiness.
 
-The extension does not call `ORESoftware/ores-cli`, does not call a command named `ores`, and does not invoke the Java compiler directly. `oreslang-cli` owns the editor-facing process contract and delegates safely to the non-executing compiler backend.
+**Acceptance:** name exact source SHA/tree, runtime/toolchain, positive and negative checks and execution receipt before claiming support. Host-only tests and empty CI steps do not prove guest execution.
 
-The extension invokes the CLI only when **VS Code Workspace Trust** is enabled.
-An untrusted workspace receives TextMate highlighting and lightweight scanner
-diagnostics, but cannot launch a configured executable, including through the
-explicit check command. CLI arguments are passed without a shell and placeholders
-are expanded atomically. The lexical scanner skips raw template bodies and
-files over 2 MiB; the compiler remains authoritative for full syntax checks.
+## Legacy provenance and transfer verification
 
-Use **Oreslang: Check Current File** to run an explicit compiler check.
+The historical predecessor was `ores-truffle-oreslang/vscode-plugins`. This repository is maintained in `atto-lang`; matching names or imported history do not establish preserved numeric repository identity or code parity. Preserve working legacy `.ores` inputs and historical package/CLI aliases until compiler-backed replacements and consumers are verified. New source follows canonical `.atto` contracts.
 
-## Development
+VS Code highlighting, LSP integration and editor workflows belong here; compiler lowering and commercial hosting do not. Preserving historical compatibility does not require registering legacy extensions in this preview. [atto-lang](https://github.com/atto-lang) maintains language, portable libraries and tooling; [atto-co](https://github.com/atto-co) separately governs commercial deployment, tenant infrastructure, identity, marketplace and billing. Any further original-ID transfer or commercial carve-out requires separate owner authorization and independent security review. This document authorizes no transfer or private-source mirror.
 
-No build step is required.
-
-```bash
-npm test
-```
-
-Then open this repository in VS Code and launch an Extension Development Host.
-
-## Source of truth
-
-Language syntax should track the compiler lexer and grammar in:
-
-- `ores-truffle-oreslang/oreslang-source.java/src/main/java/dev/oreslang/parser/Lexer.java`
-- `ores-truffle-oreslang/oreslang-source.java/docs/grammar.ebnf`
-
-### Compiler compatibility
-
-The editor grammar tracks proposed compiler constructs without changing compiler acceptance. See [docs/compiler-pr-sync.md](docs/compiler-pr-sync.md) for the October 2026 upstream PR matrix and validation gates.
-
-## Shared lexer fixture contract
-
-`conformance/oreslang-syntax-v1.json` is copied byte-for-byte into VS Code,
-Sublime Text, and the HTML highlighter. `test/conformance.test.js` verifies
-positive and negative editor-token cases. These are **source-free host checks**,
-not proof that the compiler accepts the examples or that VS Code's actual
-TextMate renderer colors them identically.
-
-The manifest pins the authoritative Java lexer and EBNF blob identities. The
-pinned compiler `main` still recognizes `isoactor`, `null`, `%` and `^`,
-whereas the proposed editor-target contract intentionally excludes them.
-That is an explicit compiler/editor parity discrepancy, **not** a validated
-compiler migration. Review before merging semantics changes.
-
-The shared suite now includes **50 adversarial fixtures**. The tests run
-through regular editor PR CI and validate only the editor-target contract.
-
-**Privacy boundary:** The compiler source repository is private. Public
-workflows must not clone or mirror its source. The removed scheduled watcher
-could not verify private Git blobs via anonymous fetches. Compiler-side
-lexer/parser tests are proposed in private oreslang-source.java PR #2350,
-but currently have zero executed CI steps. Public editor CI is not a proof
-of compiler acceptance, guest execution, or actual TextMate rendering.
-
-## TextMate engine tests
-
-The new textmate-engine test uses the real `vscode-textmate` interpreter and `vscode-oniguruma` WASM to assert token scope boundaries across nested comments, quoted strings, Symbols, compound forms and runtime globals. This does not yet run a VS Code Extension Host, custom color decoration rendering or a compiler.
-
-## Explicit syntax profiles (compiler-current default)
-
-The registered `.ores` editor grammar and `lib/scan.js` preserve the pinned Java lexer `compiler-current` behavior. `lib/scan-target-preview.js` and `syntaxes/oreslang-target-preview.tmLanguage.json` are **unregistered test-only artifacts** for the 50-case proposed target syntax. Do not activate or publish the target preview as compiler parity; `contracts/editor-syntax/v1/profile-reconciliation.json` requires native compiler proof and independent review. The editor's main TextMate tests exercise the proposed preview explicitly; the baseline compiler tests exercise the installed grammar.
-
-## Additional editors and coding agents
-
-The canonical VS Code TextMate grammar can also be exported for Visual Studio and IntelliJ without maintaining a second grammar. Claude Code and Codex use the highlighting provided by their host editor; their standalone terminal rendering is separate. See [the six-target support matrix and portable export instructions](docs/editor-targets.md).
-
-## Installable VS Code extension
-
-Successful CI runs upload an `oreslang-vscode-vsix` artifact containing the Oreslang VS Code `oreslang-vscode.vsix` file. Download and extract the outer GitHub Actions artifact ZIP; then open **Extensions > Install from VSIX…** in VS Code, or run:
-
-~~~sh
-code --install-extension oreslang-vscode.vsix
-~~~
-
-This VSIX is produced using pinned `@vscode/vsce@4.1.0` packaging and checked for canonical grammar bytes, language registration and expected extension runtime files. It is not a published marketplace release. Instructions for native Sublime, Visual Studio (Windows IDE), IntelliJ, Claude Code and Codex workflows are in [docs/editor-targets.md](docs/editor-targets.md).
-
-## Repository ownership and migration (2026-11-08)
-
-**AttoLang** is the public language name; the current repository is still `ores-truffle-oreslang/vscode-plugins` (legacy namespace). Preserve existing `oreslang-*` identifiers, old commands and `.ores` compatibility until migration and feature support are independently verified.
-
-- **Belongs here:** VS Code language highlighting, LSP integration, editor workflows and tests.
-- **Does not belong here:** compiler backend lowering or commercial hosting control.
-- **Ownership:** [`atto-lang`](https://github.com/atto-lang) owns language, compiler, tooling, portable core/std, conformance and developer ecosystem; [`atto-co`](https://github.com/atto-co) owns separately governed hosted runtime, deployment, identity, billing and cloud operations. An existing similarly named `atto-*` repo does not automatically contain this repo's code or retain its numeric identity.
-- **Proposed first destination:** `atto-lang/vscode-plugins` via an approved *GitHub repository transfer* preserving numeric ID/history/name. The existing plan authorizes **no** direct legacy-org transfer to `atto-co`; future product spinouts need their own approval.
-
-**Cutover instructions:** coordinate in [migration issue #26](https://github.com/ores-truffle-oreslang/.github/issues/26) and consult the private [runbook draft #25](https://github.com/ores-truffle-oreslang/.github/pull/25). Require named source/target admins and independent security reviewer, exact head SHA/tree, target protection/rulesets, permissions, Actions and actual executed steps, secrets, releases, Pages, packages, apps, webhooks, open PRs, consumers and rollback owner before any transfer; never mirror private code without separate authorization. Verify unchanged GitHub ID/tree and control parity afterward, update clients separately, and execute exact-head tests. Zero-step Actions are `NOT_EXECUTED`; host-only checks are not compiled-guest evidence. No forced language/CLI rename or production capability claims.
+Before an authorized transfer, coordinate in [migration issue #26](https://github.com/ores-truffle-oreslang/.github/issues/26) and review the authorized runbook. Record source/target administrators, numeric ID, exact SHA/tree, history, visibility, access, rulesets, open PRs/issues, releases, packages, consumers, CI/billing/runners, secrets, deploy keys, apps, webhooks, Pages and rollback ownership. Verify unchanged ID/history/tree and restored controls afterward; execute exact-head tests before changing consumers. Zero-step jobs are NOT_EXECUTED; host-only and source-free checks do not certify compiled guest execution or production capabilities.
