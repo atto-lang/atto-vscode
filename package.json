@@ -19,8 +19,7 @@
           "atto"
         ],
         "extensions": [
-          ".atto",
-          ".ores"
+          ".atto"
         ],
         "configuration": "./language-configuration.json"
       }
