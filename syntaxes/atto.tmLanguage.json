@@ -132,12 +132,16 @@
     "keywords": {
       "patterns": [
         {
+          "name": "keyword.entity.atto",
+          "match": "(?<![\\p{L}\\p{N}_.])mtd(?=[ \\t]+(?:[\\p{L}_][\\p{L}\\p{N}_]*[ \\t]*(?:\\(|<[^<>\\r\\n]+>[ \\t]*\\()|\\[Symbol\\.[\\p{L}_][\\p{L}\\p{N}_]*\\][ \\t]*\\(|\\([^()\\r\\n]*\\)[ \\t]+[\\p{L}_][\\p{L}\\p{N}_]*[ \\t]*(?:\\(|<[^<>\\r\\n]+>[ \\t]*\\()))"
+        },
+        {
           "name": "keyword.declaration.atto",
           "match": "(?<![\\p{L}\\p{N}_])(?:define|import|impl|def)(?![\\p{L}\\p{N}_])"
         },
         {
           "name": "keyword.entity.atto",
-          "match": "(?<![\\p{L}\\p{N}_])(?:generator|interface|namespace|contract|isoactor|routine|module|struct|actor|class|trait|type|mtd|fnc)(?![\\p{L}\\p{N}_])"
+          "match": "(?<![\\p{L}\\p{N}_])(?:generator|interface|namespace|contract|isoactor|routine|module|struct|actor|class|trait|type|fnc)(?![\\p{L}\\p{N}_])"
         },
         {
           "name": "keyword.type.atto",

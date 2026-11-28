@@ -53,5 +53,14 @@
     "prefix": "atto-pipe",
     "description": "Functional pipeline, distinct from actor pipe keyword",
     "body": "${1:value} |> ${2:transform}"
+  },
+  "Atto instance method (preview)": {
+    "prefix": "atto-mtd",
+    "description": "Explicit instance method scaffold inside a nominal declaration; compiler support varies",
+    "body": [
+      "mtd ${1:name}(${2}): ${3:int} {",
+      "  ${0:return 0;}",
+      "}"
+    ]
   }
 }
